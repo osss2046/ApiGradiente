@@ -1,27 +1,24 @@
 package com.gestorlibros.gradiente.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String language;
-    private String author;
-    private int downloadCount;
 
-    public String getAuthor() {
-        return author;
-    }
+    private String titulo;
+    private String idioma;
+    private int year;
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+    @ManyToMany(mappedBy = "books")
+    private Set<Author> authors;
+
+    // Getters y Setters
 
     public Long getId() {
         return id;
@@ -31,28 +28,56 @@ public class Book {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getIdioma() {
+        return idioma;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
-    public int getDownloadCount() {
-        return downloadCount;
+    public int getYear() {
+        return year;
     }
 
-    public void setDownloadCount(int downloadCount) {
-        this.downloadCount = downloadCount;
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Título: ").append(titulo).append("\n")
+                .append("Idioma: ").append(idioma).append("\n")
+                .append("Año: ").append(year).append("\n")
+                .append("Autores: ");
+        for (Author author : authors) {
+            sb.append(author.getNombre()).append(" (").append(author.getBirthYear());
+            if (author.getDeathYear() != null) {
+                sb.append(" - ").append(author.getDeathYear());
+            }
+            sb.append("), ");
+        }
+        // Remove the last comma and space
+        if (!authors.isEmpty()) {
+            sb.setLength(sb.length() - 2);
+        }
+        return sb.toString();
     }
 }
-
